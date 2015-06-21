@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html>
-	<head>
+<head>
 
-		<title> Real time multi-player games with HTML5</title>
+	<title>Real time multi-player games with HTML5</title>
 
-			<!-- Load style sheet -->
-		<link href="/public/css/styles.css" media="screen" rel="stylesheet" type="text/css">
+	<!-- Load style sheet -->
+	<link href="/public/css/styles.css" media="screen" rel="stylesheet" type="text/css">
 
 	<!-- Library code -->
 
-		 	<!-- Load socket.io client side contents. -->
-		<script src="/socket.io/socket.io.js"></script>
+	<!-- Load socket.io client side contents. -->
+	<script src="/socket.io/socket.io.js"></script>
 
 
-	 		<!-- Load the GUI rendering library code. -->
-		<script type="text/javascript" src="lib/dat.gui.min.js"></script>
-			<!-- Load the keyboard specific code -->
-		<script type="text/javascript" src="lib/keyboard.js"></script>
+	<!-- Load the GUI rendering library code. -->
+	<script type="text/javascript" src="lib/dat.gui.min.js"></script>
+	<!-- Load the keyboard specific code -->
+	<script type="text/javascript" src="lib/keyboard.js"></script>
 
 	<!-- Game code -->
 
-	 		<!-- Load the common game code. -->
-		<script type="text/javascript" src="/game/Player.js"></script>
-		<script type="text/javascript" src="/game/Core.js"></script>
-			<!-- Finally, Load the game client code. -->
-		<script type="text/javascript" src="/public/js/client.js"></script>
+	<!-- Load the common game code. -->
+	<script type="text/javascript" src="/game/Player.js"></script>
+	<script type="text/javascript" src="/game/Core.js"></script>
 
-	</head>
+	<!-- Finally, Load the game client code. -->
+	<script type="text/javascript" src="/public/js/client.js"></script>
 
-	<body>
-		<canvas id="viewport"></canvas>
-	</body>
+</head>
+
+<body>
+	<canvas id="viewport"></canvas>
+</body>
 
 </html>

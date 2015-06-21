@@ -71,14 +71,14 @@ socket.sockets.on('connection', function(client) {
     // Generate a new UUID, looks something like
     // 5b2ca132-64bd-4513-99da-90e838ca47d1
     // and store this on their socket/connection
-    client.uid = '1'; //UUID();
+    client.uid = UUID();
 
     // tell the player they connected, giving them their id
-    client.emit('onconnected', { id: client.userid } );
+    client.emit('onconnected', { uid: client.uid } );
 
     // now we can find them a game to play with someone.
     // if no game exists with someone waiting, they create one and wait.
-    game_server.joinGame('1', client);
+    game_server.joinGame(client.uid, client);
 
     // Useful to know when someone connects
     console.log('\t socket.io:: player ' + client.uid + ' connected');
@@ -95,7 +95,7 @@ socket.sockets.on('connection', function(client) {
     // in, and make sure the other player knows that they left and so on.
     client.on('disconnect', function () {
         // Useful to know when soomeone disconnects
-        console.log('\t socket.io:: client disconnected ' + client.userid + ' ' + client.game_id);
+        console.log('\t socket.io:: client disconnected ' + client.uid);
 
         // If the client was in a game, set by game_server.findGame,
         // we can tell the game server to update that game state.

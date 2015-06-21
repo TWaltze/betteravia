@@ -33,61 +33,36 @@ GameServer.log = function() {
 };
 
 GameServer.onMessage = function(client,message) {
-
-    if(this.fake_latency && message.split('.')[0].substr(0,1) == 'i') {
-
-            //store all input message
-        GameServer.messages.push({client:client, message:message});
-
-        setTimeout(function(){
-            if(GameServer.messages.length) {
-                GameServer._onMessage( GameServer.messages[0].client, GameServer.messages[0].message );
-                GameServer.messages.splice(0,1);
-            }
-        }.bind(this), this.fake_latency);
-
-    } else {
-        GameServer._onMessage(client, message);
-    }
+    GameServer._onMessage(client, message);
 };
 
-GameServer._onMessage = function(client,message) {
-
-        //Cut the message up into sub components
+GameServer._onMessage = function(client, message) {
+    //Cut the message up into sub components
     var message_parts = message.split('.');
-        //The first is always the type of message
+    //The first is always the type of message
     var message_type = message_parts[0];
 
-    var other_client =
-        (client.game.player_host.userid == client.userid) ?
-            client.game.player_client : client.game.player_host;
-
     if(message_type == 'i') {
-            //Input handler will forward this
+        //Input handler will forward this
         this.onInput(client, message_parts);
     } else if(message_type == 'p') {
         client.send('s.p.' + message_parts[1]);
-    } else if(message_type == 'c') {    //Client changed their color!
-        if(other_client)
-            other_client.send('s.c.' + message_parts[1]);
-    } else if(message_type == 'l') {    //A client is asking for lag simulation
-        this.fake_latency = parseFloat(message_parts[1]);
     }
 
 }; //GameServer.onMessage
 
 GameServer.onInput = function(client, parts) {
-        //The input commands come in like u-l,
-        //so we split them up into separate commands,
-        //and then update the players
+    //The input commands come in like u-l,
+    //so we split them up into separate commands,
+    //and then update the players
     var input_commands = parts[1].split('-');
     var input_time = parts[2].replace('-','.');
     var input_seq = parts[3];
 
-        //the client should be in a game, so
-        //we can tell that game to handle the input
-    if(client && client.game && client.game.gamecore) {
-        client.game.gamecore.handle_server_input(client, input_commands, input_time, input_seq);
+    //the client should be in a game, so
+    //we can tell that game to handle the input
+    if(client && client.game) {
+        client.game.handle_server_input(client, input_commands, input_time, input_seq);
     }
 
 }; //GameServer.onInput
@@ -262,6 +237,8 @@ GameServer.init = function() {
 };
 
 GameServer.joinGame = function(player, client) {
+    console.log("player", player);
+    console.log("game", this.game);
     this.game.addPlayer(new Player(player, client, this.game));
 };
 

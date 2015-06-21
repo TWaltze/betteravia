@@ -14,7 +14,6 @@ var game = {};
 window.onload = function() {
 	//Create our game client instance.
 	game = new Core(false);
-	game.addPlayer(new Player('1', null, game));
 
 	//Fetch the viewport
 	game.viewport = document.getElementById('viewport');
@@ -28,8 +27,5 @@ window.onload = function() {
 
 	//Set the draw style for the font
 	game.ctx.font = '11px "Helvetica"';
-
-	//Finally, start the loop
-	game.update( new Date().getTime() );
 
 };

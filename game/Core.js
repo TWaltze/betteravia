@@ -58,17 +58,15 @@ function Core(server) {
     this._dt = new Date().getTime();    //The local timer delta
     this._dte = new Date().getTime();   //The local timer last frame time
 
-    //Start a physics loop, this is separate to the rendering
-    //as this happens at a fixed frequency
-    this.create_physics_simulation();
-
     //Start a fast paced timer for measuring time easier
     this.create_timer();
 
+    // Start a physics loop, this is separate to the rendering
+    // as this happens at a fixed frequency
+    this.create_physics_simulation();
+
     //Client specific initialisation
     if(!this.server) {
-        this.localPlayer = '1';
-
         //Create a keyboard handler
         this.keyboard = new THREEx.KeyboardState();
 
@@ -84,7 +82,7 @@ function Core(server) {
 
         //We start pinging the server to determine latency
         this.client_create_ping_timer();
-    } else { //if !server
+    } else {
         this.server_time = 0;
         this.laststate = {};
     }
@@ -108,6 +106,7 @@ Core.prototype.lerp = function(p, n, t) { var _t = Number(t); _t = (Math.max(0, 
 Core.prototype.v_lerp = function(v,tv,t) { return { x: this.lerp(v.x, tv.x, t), y:this.lerp(v.y, tv.y, t) }; };
 
 Core.prototype.update = function(t) {
+    console.log("updating");
     //Work out the delta time
     this.dt = this.lastframetime ? ((t - this.lastframetime) / 1000.0).fixed() : 0.016;
 
@@ -568,6 +567,7 @@ Core.prototype.client_update_physics = function() {
 };
 
 Core.prototype.client_update = function() {
+    console.log("client_update");
     //Clear the screen area
     this.ctx.clearRect(0,0,720,480);
 
@@ -585,6 +585,7 @@ Core.prototype.client_update = function() {
 
     //Now they should have updated, we can draw the entity
     for(var uid in this.players) {
+        console.log("players", this.players);
         var player = this.players[uid];
 
         // Don't run on inherited Object properties
@@ -753,18 +754,27 @@ Core.prototype.client_onhostgame = function(data) {
 
     //Make sure we start in the correct place as the host.
     this.client_reset_positions();
-
 };
 
 Core.prototype.client_onconnected = function(data) {
+    console.log('data', data);
+    this.localPlayer = data.uid;
+
+	this.addPlayer(new Player(this.localPlayer, null, game));
+
     //The server responded that we are now in a game,
     //this lets us store the information about ourselves and set the colors
     //to show we are now ready to be playing.
-    this.players[this.localPlayer].id = data.id;
     this.players[this.localPlayer].info_color = '#cc0000';
     this.players[this.localPlayer].state = 'connected';
     this.players[this.localPlayer].online = true;
 
+	//Finally, start the loop
+	game.update(new Date().getTime());
+
+    // Start a physics loop, this is separate to the rendering
+    // as this happens at a fixed frequency
+    this.create_physics_simulation();
 };
 
 Core.prototype.client_on_otherclientcolorchange = function(data) {
@@ -838,8 +848,8 @@ Core.prototype.client_connect_to_server = function() {
 
     //When we connect, we are not 'connected' until we have a server id
     //and are placed in a game by the server. The server sends us a message for that.
-    this.socket.on('connect', function(){
-        this.players[this.localPlayer].state = 'connecting';
+    this.socket.on('connect', function() {
+        // this.players[this.localPlayer].state = 'connecting';
     }.bind(this));
 
     //Sent when we are disconnected (network, server down, etc)
@@ -892,16 +902,7 @@ Core.prototype.client_draw_info = function() {
         this.ctx.fillText('client_smoothing/client_smooth : When updating players information from the server, it can smooth them out.', 10 , 210);
         this.ctx.fillText(' This only applies to other clients when prediction is enabled, and applies to local player with no prediction.', 170 , 230);
 
-    } //if this.show_help
-
-    //Draw some information for the host
-    console.log('players', this.players);
-    if(this.players[this.localPlayer].host) {
-
-        this.ctx.fillStyle = 'rgba(255,255,255,0.7)';
-        this.ctx.fillText('You are the host', 10 , 465);
-
-    } //if we are the host
+    }
 
 
         //Reset the style back to full white.
