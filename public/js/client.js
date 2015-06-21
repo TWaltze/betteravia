@@ -1,57 +1,9 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8" />
-	<title>Phaser - Getting started</title>
-	<script type="text/javascript" src="public/js/phaser.min.js"></script>
-	<script src="/socket.io/socket.io.js"></script>
-    <style type="text/css">
-        body {
-            margin: 0;
-        }
-    </style>
-</head>
-<body>
-<script type="text/javascript">
-
-RemotePlayer = function (index, game, player, startX, startY) {
-    var x = startX;
-    var y = startY;
-
-    this.game = game;
-    this.health = 3;
-    this.player = player;
-    this.alive = true;
-
-    this.player = game.add.sprite(x, y, 'enemy');
-
-    this.player.animations.add('move', [0,1,2,3,4,5,6,7], 20, true);
-    this.player.animations.add('stop', [3], 20, true);
-
-    this.player.anchor.setTo(0.5, 0.5);
-	game.physics.enable(this.player, Phaser.Physics.ARCADE);
-    this.player.name = index.toString();
-    this.player.body.immovable = true;
-    this.player.body.collideWorldBounds = true;
-
-    this.player.angle = game.rnd.angle();
-
-    this.lastPosition = { x: x, y: y }
-};
-
-RemotePlayer.prototype.update = function() {
-    if(this.player.x != this.lastPosition.x || this.player.y != this.lastPosition.y) {
-        this.player.play('move');
-        this.player.rotation = Math.PI + game.physics.arcade.angleToXY(this.player, this.lastPosition.x, this.lastPosition.y);
-    } else {
-        this.player.play('stop');
-    }
-
-    this.lastPosition.x = this.player.x;
-    this.lastPosition.y = this.player.y;
-};
-
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
+    preload: preload,
+    create: create,
+    update: update,
+    render: render
+});
 
 function preload () {
     game.load.image('earth', 'public/assets/light_sand.png');
@@ -59,14 +11,10 @@ function preload () {
     game.load.spritesheet('enemy', 'public/assets/dude.png', 64, 64);
 }
 
-var socket;         // Socket connection
-
+var socket;
 var land;
-
 var player;
-
-var enemies;
-
+var remotePlayers;
 var currentSpeed = 0;
 var cursors;
 
@@ -146,7 +94,7 @@ function onNewPlayer(data) {
     console.log("New player connected: "+data.id);
 
     // Add new player to the remote players array
-    enemies.push(new RemotePlayer(data.id, game, player, data.x, data.y));
+    enemies.push(new Player(data.id, game, player, data.x, data.y));
 	console.log(enemies);
 };
 
@@ -247,19 +195,3 @@ function update () {
 function render () {
 
 }
-
-// Find player by ID
-function playerById(id) {
-    var i;
-    for (i = 0; i < enemies.length; i++) {
-        if (enemies[i].player.name == id)
-            return enemies[i];
-    };
-
-    return false;
-};
-
-</script>
-
-</body>
-</html>
