@@ -20,8 +20,10 @@ var cursors;
 
 
 function create () {
+    socket = io.connect(SERVER_URL);
 
-    socket = io.connect("http://localhost:4001");
+    //  We're going to be using physics, so enable the Arcade Physics system
+    game.physics.startSystem(Phaser.Physics.ARCADE);
 
     //  Resize our game world to be a 2000 x 2000 square
     game.world.setBounds(-500, -500, 1000, 1000);
@@ -110,8 +112,8 @@ function onMovePlayer(data) {
     };
 
     // Update player position
-    movePlayer.player.x = data.x;
-    movePlayer.player.y = data.y;
+    movePlayer.sprite.x = data.x;
+    movePlayer.sprite.y = data.y;
 
 };
 
@@ -126,7 +128,7 @@ function onRemovePlayer(data) {
         return;
     };
 
-    removePlayer.player.kill();
+    removePlayer.sprite.kill();
 
     // Remove player from array
     enemies.splice(enemies.indexOf(removePlayer), 1);
@@ -140,7 +142,7 @@ function update () {
         if (enemies[i].alive)
         {
             enemies[i].update();
-            game.physics.arcade.collide(player, enemies[i].player);
+            game.physics.arcade.collide(player, enemies[i].sprite);
         }
     }
 
