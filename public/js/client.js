@@ -36,28 +36,16 @@ function create () {
     var startX = Math.round(Math.random()*(1000)-500),
         startY = Math.round(Math.random()*(1000)-500);
 
-    player = game.add.sprite(startX, startY, 'dude');
-    game.physics.enable(player, Phaser.Physics.ARCADE);
+    player = new Player("foobar", game, startX, startY);
 
-    player.animations.add('move', [0,1,2,3,4,5,6,7], 20, true);
-    player.animations.add('stop', [3], 20, true);
-
-    player.anchor.setTo(0.5, 0.5);
-
-    player.name = "foobar";
-    // player.body.immovable = true;
-    player.body.collideWorldBounds = true;
-
-    //  This will force it to decelerate and limit its speed
-    // player.body.maxVelocity.setTo(400, 400);
-    // player.angle = game.rnd.angle();
+    player.sprite.body.maxVelocity.setTo(400, 400);
+    player.sprite.body.immovable = false;
+    player.sprite.bringToTop();
 
     //  Create some baddies to waste :)
     enemies = [];
 
-    // player.bringToTop();
-
-    game.camera.follow(player);
+    game.camera.follow(player.sprite);
     game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
     game.camera.focusOnXY(0, 0);
 
@@ -89,7 +77,7 @@ function onSocketConnected() {
     console.log("Connected to socket server");
 
     // Send local player data to the game server
-    socket.emit("new player", {x: player.x, y:player.y});
+    socket.emit("new player", {x: player.sprite.x, y:player.sprite.y});
 };
 
 // Socket disconnected
@@ -148,17 +136,19 @@ function update () {
         if (enemies[i].alive)
         {
             enemies[i].update();
-            game.physics.arcade.collide(player, enemies[i].sprite);
+            console.log("Player", player.sprite);
+            console.log("enemy", enemies[i].sprite)
+            console.log(game.physics.arcade.collide(player.sprite, enemies[i].sprite));
         }
     }
 
     if (cursors.left.isDown)
     {
-        player.angle -= 4;
+        player.sprite.angle -= 4;
     }
     else if (cursors.right.isDown)
     {
-        player.angle += 4;
+        player.sprite.angle += 4;
     }
 
     if (cursors.up.isDown)
@@ -176,13 +166,13 @@ function update () {
 
     if (currentSpeed > 0)
     {
-        game.physics.arcade.velocityFromRotation(player.rotation, currentSpeed, player.body.velocity);
+        game.physics.arcade.velocityFromRotation(player.sprite.rotation, currentSpeed, player.sprite.body.velocity);
 
-        player.animations.play('move');
+        player.sprite.animations.play('move');
     }
     else
     {
-        player.animations.play('stop');
+        player.sprite.animations.play('stop');
     }
 
     land.tilePosition.x = -game.camera.x;
@@ -190,14 +180,14 @@ function update () {
 
     if (game.input.activePointer.isDown)
     {
-        if (game.physics.arcade.distanceToPointer(player) >= 10) {
+        if (game.physics.arcade.distanceToPointer(player.sprite) >= 10) {
             currentSpeed = 300;
 
-            player.rotation = game.physics.arcade.angleToPointer(player);
+            player.sprite.rotation = game.physics.arcade.angleToPointer(player.sprite);
         }
     }
 
-    socket.emit("move player", {x: player.x, y:player.y});
+    socket.emit("move player", {x: player.sprite.x, y:player.sprite.y});
 }
 
 function render () {
