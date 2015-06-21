@@ -35,21 +35,27 @@ function create () {
     //  The base of our player
     var startX = Math.round(Math.random()*(1000)-500),
         startY = Math.round(Math.random()*(1000)-500);
+
     player = game.add.sprite(startX, startY, 'dude');
-    player.anchor.setTo(0.5, 0.5);
+    game.physics.enable(player, Phaser.Physics.ARCADE);
+
     player.animations.add('move', [0,1,2,3,4,5,6,7], 20, true);
     player.animations.add('stop', [3], 20, true);
 
-    //  This will force it to decelerate and limit its speed
-	game.physics.enable(player, Phaser.Physics.ARCADE);
-    //player.body.drag.setTo(200, 200);
-    player.body.maxVelocity.setTo(400, 400);
+    player.anchor.setTo(0.5, 0.5);
+
+    player.name = "foobar";
+    // player.body.immovable = true;
     player.body.collideWorldBounds = true;
+
+    //  This will force it to decelerate and limit its speed
+    // player.body.maxVelocity.setTo(400, 400);
+    // player.angle = game.rnd.angle();
 
     //  Create some baddies to waste :)
     enemies = [];
 
-    player.bringToTop();
+    // player.bringToTop();
 
     game.camera.follow(player);
     game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
@@ -96,7 +102,7 @@ function onNewPlayer(data) {
     console.log("New player connected: "+data.id);
 
     // Add new player to the remote players array
-    enemies.push(new Player(data.id, game, player, data.x, data.y));
+    enemies.push(new Player(data.id, game, data.x, data.y));
 	console.log(enemies);
 };
 

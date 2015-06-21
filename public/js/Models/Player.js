@@ -1,4 +1,4 @@
-Player = function (index, game, player, startX, startY) {
+Player = function (index, game, startX, startY) {
     var x = startX;
     var y = startY;
 
@@ -6,13 +6,14 @@ Player = function (index, game, player, startX, startY) {
     this.health = 3;
     this.alive = true;
 
-    this.sprite = game.add.sprite(x, y, 'enemy');
+    this.sprite = game.add.sprite(x, y, 'dude');
+    game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
 
     this.sprite.animations.add('move', [0,1,2,3,4,5,6,7], 20, true);
     this.sprite.animations.add('stop', [3], 20, true);
 
     this.sprite.anchor.setTo(0.5, 0.5);
-	game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
+
     this.sprite.name = index.toString();
     this.sprite.body.immovable = true;
     this.sprite.body.collideWorldBounds = true;
