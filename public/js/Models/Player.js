@@ -22,7 +22,7 @@ Player.prototype = {
         this.sprite.body.collideWorldBounds = true;
         this.sprite.angle = game.rnd.angle();
 
-        this.name = index.toString();
+        this.id = index.toString();
         this.health = 3;
         this.alive = true;
 
@@ -44,14 +44,3 @@ Player.prototype = {
         this.lastPosition.y = this.sprite.y;
     }
 }
-
-// Find player by ID
-function playerById(id) {
-    var i;
-    for (i = 0; i < enemies.length; i++) {
-        if (enemies[i].sprite.name == id)
-            return enemies[i];
-    };
-
-    return false;
-};

@@ -16,12 +16,14 @@ LocalPlayer.prototype.create = function(index, x, y) {
 }
 
 LocalPlayer.prototype.update = function() {
-    for (var i = 0; i < enemies.length; i++) {
-        if (enemies[i].alive) {
-            enemies[i].update();
-            game.physics.arcade.collide(player.sprite, enemies[i].sprite);
+    var _self = this;
+
+    remotePlayers.forEach(function(p) {
+        if (p.alive) {
+            p.update();
+            game.physics.arcade.collide(_self.sprite, p.sprite);
         }
-    }
+    });
 
     if (cursors.left.isDown) {
         player.sprite.angle -= 4;

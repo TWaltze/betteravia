@@ -8,8 +8,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 var socket;
 var map;
 var player;
-var remotePlayers;
-var enemies = [];
+var remotePlayers = [];
 var currentSpeed = 0;
 var cursors;
 
@@ -53,6 +52,17 @@ function render() {
 
 }
 
+// Find player by ID
+function findPlayer(id) {
+    for (var i = 0; i < remotePlayers.length; i++) {
+        if (remotePlayers[i].sprite.name == id) {
+            return remotePlayers[i];
+        }
+    };
+
+    return false;
+};
+
 var setEventHandlers = function() {
     // Socket connection successful
     socket.on("connect", onSocketConnected);
@@ -95,12 +105,12 @@ function onNewPlayer(data) {
     newPlayer.preload();
     newPlayer.create(data.id, data.x, data.y);
 
-    enemies.push(newPlayer);
+    remotePlayers.push(newPlayer);
 };
 
 // Move player
 function onMovePlayer(data) {
-    var movePlayer = playerById(data.id);
+    var movePlayer = findPlayer(data.id);
 
     // Player not found
     if (!movePlayer) {
@@ -116,7 +126,7 @@ function onMovePlayer(data) {
 
 // Remove player
 function onRemovePlayer(data) {
-    var removePlayer = playerById(data.id);
+    var removePlayer = findPlayer(data.id);
 
     // Player not found
     if (!removePlayer) {
@@ -127,6 +137,6 @@ function onRemovePlayer(data) {
     removePlayer.sprite.kill();
 
     // Remove player from array
-    enemies.splice(enemies.indexOf(removePlayer), 1);
+    remotePlayers.splice(remotePlayers.indexOf(removePlayer), 1);
 
 };
