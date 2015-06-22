@@ -5,19 +5,21 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
     render: render
 });
 
-function preload () {
-    game.load.image('earth', 'public/assets/light_sand.png');
-    game.load.spritesheet('dude', 'public/assets/dude.png', 64, 64);
-    game.load.spritesheet('enemy', 'public/assets/dude.png', 64, 64);
-}
-
 var socket;
-var land;
+var map;
 var player;
 var remotePlayers;
+var enemies = [];
 var currentSpeed = 0;
 var cursors;
 
+function preload () {
+    map = new Map(game);
+    map.preload();
+
+    player = new LocalPlayer(game, map);
+    player.preload();
+}
 
 function create () {
     socket = io.connect(SERVER_URL);
@@ -25,25 +27,12 @@ function create () {
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    //  Resize our game world to be a 2000 x 2000 square
-    game.world.setBounds(-500, -500, 1000, 1000);
+    map.create();
 
-    //  Our tiled scrolling background
-    land = game.add.tileSprite(0, 0, 800, 600, 'earth');
-    land.fixedToCamera = true;
-
-    //  The base of our player
-    var startX = Math.round(Math.random()*(1000)-500),
-        startY = Math.round(Math.random()*(1000)-500);
-
-    player = new Player("foobar", game, startX, startY);
-
-    player.sprite.body.maxVelocity.setTo(400, 400);
-    player.sprite.body.immovable = false;
-    player.sprite.bringToTop();
-
-    //  Create some baddies to waste :)
-    enemies = [];
+    // The base of our player
+    var x = Math.round(Math.random()*(1000)-500);
+    var y = Math.round(Math.random()*(1000)-500);
+    player.create("foobar", x, y);
 
     game.camera.follow(player.sprite);
     game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
@@ -53,6 +42,15 @@ function create () {
 
     // Start listening for events
     setEventHandlers();
+}
+
+function update() {
+    map.update();
+    player.update();
+}
+
+function render() {
+
 }
 
 var setEventHandlers = function() {
@@ -77,7 +75,10 @@ function onSocketConnected() {
     console.log("Connected to socket server");
 
     // Send local player data to the game server
-    socket.emit("new player", {x: player.sprite.x, y:player.sprite.y});
+    socket.emit("new player", {
+        x: player.sprite.x,
+        y: player.sprite.y
+    });
 };
 
 // Socket disconnected
@@ -87,21 +88,23 @@ function onSocketDisconnect() {
 
 // New player
 function onNewPlayer(data) {
-    console.log("New player connected: "+data.id);
+    console.log("New player connected: " + data.id);
 
     // Add new player to the remote players array
-    enemies.push(new Player(data.id, game, data.x, data.y));
-	console.log(enemies);
+    var newPlayer = new Player(game, map);
+    newPlayer.preload();
+    newPlayer.create(data.id, data.x, data.y);
+
+    enemies.push(newPlayer);
 };
 
 // Move player
 function onMovePlayer(data) {
-
     var movePlayer = playerById(data.id);
 
     // Player not found
     if (!movePlayer) {
-        console.log("Player not found: "+data.id);
+        console.log("Player not found: " + data.id);
         return;
     };
 
@@ -113,12 +116,11 @@ function onMovePlayer(data) {
 
 // Remove player
 function onRemovePlayer(data) {
-
     var removePlayer = playerById(data.id);
 
     // Player not found
     if (!removePlayer) {
-        console.log("Player not found: "+data.id);
+        console.log("Player not found: " + data.id);
         return;
     };
 
@@ -128,68 +130,3 @@ function onRemovePlayer(data) {
     enemies.splice(enemies.indexOf(removePlayer), 1);
 
 };
-
-function update () {
-
-    for (var i = 0; i < enemies.length; i++)
-    {
-        if (enemies[i].alive)
-        {
-            enemies[i].update();
-            console.log("Player", player.sprite);
-            console.log("enemy", enemies[i].sprite)
-            console.log(game.physics.arcade.collide(player.sprite, enemies[i].sprite));
-        }
-    }
-
-    if (cursors.left.isDown)
-    {
-        player.sprite.angle -= 4;
-    }
-    else if (cursors.right.isDown)
-    {
-        player.sprite.angle += 4;
-    }
-
-    if (cursors.up.isDown)
-    {
-        //  The speed we'll travel at
-        currentSpeed = 300;
-    }
-    else
-    {
-        if (currentSpeed > 0)
-        {
-            currentSpeed -= 4;
-        }
-    }
-
-    if (currentSpeed > 0)
-    {
-        game.physics.arcade.velocityFromRotation(player.sprite.rotation, currentSpeed, player.sprite.body.velocity);
-
-        player.sprite.animations.play('move');
-    }
-    else
-    {
-        player.sprite.animations.play('stop');
-    }
-
-    land.tilePosition.x = -game.camera.x;
-    land.tilePosition.y = -game.camera.y;
-
-    if (game.input.activePointer.isDown)
-    {
-        if (game.physics.arcade.distanceToPointer(player.sprite) >= 10) {
-            currentSpeed = 300;
-
-            player.sprite.rotation = game.physics.arcade.angleToPointer(player.sprite);
-        }
-    }
-
-    socket.emit("move player", {x: player.sprite.x, y:player.sprite.y});
-}
-
-function render () {
-
-}
