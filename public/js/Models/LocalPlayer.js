@@ -21,6 +21,9 @@ LocalPlayer.prototype.update = function() {
     remotePlayers.forEach(function(p) {
         if (p.alive) {
             p.update();
+            if(space.isDown) {
+                console.log("after update", p.sprite.isoPosition);
+            }
             // game.physics.arcade.collide(_self.sprite, p.sprite);
         }
     });
@@ -58,25 +61,9 @@ LocalPlayer.prototype.update = function() {
     // }
 
     // Move the player
-    var speed = 100;
+    var speed = 200;
 
-    if (cursors.up.isDown) {
-    	this.sprite.body.velocity.y = -speed;
-        this.sprite.body.velocity.x = -speed;
-        this.sprite.animations.play('N');
-    } else if (cursors.down.isDown) {
-        this.sprite.body.velocity.y = speed;
-        this.sprite.body.velocity.x = speed;
-        this.sprite.animations.play('S');
-    } else if (cursors.right.isDown) {
-        this.sprite.body.velocity.x = speed;
-        this.sprite.body.velocity.y = -speed;
-        this.sprite.animations.play('E');
-    } else if (cursors.left.isDown) {
-        this.sprite.body.velocity.x = -speed;
-        this.sprite.body.velocity.y = speed;
-        this.sprite.animations.play('W');
-    } else if (cursors.down.isDown && cursors.right.isDown) {
+    if (cursors.down.isDown && cursors.right.isDown) {
         this.sprite.body.velocity.x = speed;
         this.sprite.body.velocity.y = 0;
         this.sprite.animations.play('SE');
@@ -92,6 +79,22 @@ LocalPlayer.prototype.update = function() {
         this.sprite.body.velocity.y = -speed;
         this.sprite.body.velocity.x = 0;
         this.sprite.animations.play('NE');
+    }else if (cursors.up.isDown) {
+    	this.sprite.body.velocity.y = -speed;
+        this.sprite.body.velocity.x = -speed;
+        this.sprite.animations.play('N');
+    } else if (cursors.down.isDown) {
+        this.sprite.body.velocity.y = speed;
+        this.sprite.body.velocity.x = speed;
+        this.sprite.animations.play('S');
+    } else if (cursors.right.isDown) {
+        this.sprite.body.velocity.x = speed;
+        this.sprite.body.velocity.y = -speed;
+        this.sprite.animations.play('E');
+    } else if (cursors.left.isDown) {
+        this.sprite.body.velocity.x = -speed;
+        this.sprite.body.velocity.y = speed;
+        this.sprite.animations.play('W');
     } else {
         this.sprite.body.velocity.x = 0;
         this.sprite.body.velocity.y = 0;

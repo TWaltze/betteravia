@@ -14,6 +14,7 @@ var player;
 var remotePlayers = [];
 var currentSpeed = 0;
 var cursors;
+var space;
 
 function preload () {
     game.time.advancedTiming = true;
@@ -52,6 +53,7 @@ function create () {
     // game.camera.focusOnXY(0, 0);
 
     cursors = game.input.keyboard.createCursorKeys();
+    space = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     // Start listening for events
     setEventHandlers();
@@ -60,6 +62,10 @@ function create () {
 function update() {
     player.update();
     map.update();
+
+    if(space.isDown) {
+        console.log("after update", remotePlayers[0].sprite.isoPosition.set(160, 160, 2));
+    }
 }
 
 function render() {
@@ -135,7 +141,8 @@ function onMovePlayer(data) {
 
     // Update player position
     movePlayer.sprite.isoPosition.setTo(data.x, data.y, data.z);
-    console.log("x", movePlayer.sprite.isoX);
+    console.log("data", data);
+    console.log("pos", movePlayer.sprite.isoPosition);
 
 };
 
