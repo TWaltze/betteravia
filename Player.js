@@ -1,9 +1,10 @@
 /**************************************************
 ** GAME PLAYER CLASS
 **************************************************/
-var Player = function(startX, startY) {
+var Player = function(startX, startY, startZ) {
 	var x = startX,
 		y = startY,
+		z = startZ,
 		id;
 
 	// Getters and setters
@@ -15,6 +16,10 @@ var Player = function(startX, startY) {
 		return y;
 	};
 
+	var getZ = function() {
+		return z;
+	}
+
 	var setX = function(newX) {
 		x = newX;
 	};
@@ -23,12 +28,18 @@ var Player = function(startX, startY) {
 		y = newY;
 	};
 
+	var setZ = function(newZ) {
+		z = newZ;
+	}
+
 	// Define which variables and methods can be accessed
 	return {
 		getX: getX,
 		getY: getY,
+		getZ: getZ,
 		setX: setX,
 		setY: setY,
+		setZ: setZ,
 		id: id
 	}
 };

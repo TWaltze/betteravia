@@ -90,13 +90,13 @@ function onSocketConnection(client) {
 
 // Socket client has disconnected
 function onClientDisconnect() {
-	util.log("Player has disconnected: "+this.id);
+	util.log("Player has disconnected: " + this.id);
 
 	var removePlayer = playerById(this.id);
 
 	// Player not found
 	if (!removePlayer) {
-		util.log("Player not found: "+this.id);
+		util.log("Player not found: " + this.id);
 		return;
 	};
 
@@ -110,17 +110,28 @@ function onClientDisconnect() {
 // New player has joined
 function onNewPlayer(data) {
 	// Create a new player
-	var newPlayer = new Player(data.x, data.y);
+	var newPlayer = new Player(data.x, data.y, data.z);
 	newPlayer.id = this.id;
 
 	// Broadcast new player to connected socket clients
-	this.broadcast.emit("new player", {id: newPlayer.id, x: newPlayer.getX(), y: newPlayer.getY()});
+	this.broadcast.emit("new player", {
+        id: newPlayer.id,
+        x: newPlayer.getX(),
+        y: newPlayer.getY(),
+        z: newPlayer.getZ()
+    });
 
 	// Send existing players to the new player
 	var i, existingPlayer;
 	for (i = 0; i < players.length; i++) {
 		existingPlayer = players[i];
-		this.emit("new player", {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY()});
+
+		this.emit("new player", {
+            id: existingPlayer.id,
+            x: existingPlayer.getX(),
+            y: existingPlayer.getY(),
+            z: existingPlayer.getZ(),
+        });
 	};
 
 	// Add new player to the players array
@@ -134,16 +145,22 @@ function onMovePlayer(data) {
 
 	// Player not found
 	if (!movePlayer) {
-		util.log("Player not found: "+this.id);
+		util.log("Player not found: " + this.id);
 		return;
 	};
 
 	// Update player position
 	movePlayer.setX(data.x);
-	movePlayer.setY(data.y);
+    movePlayer.setY(data.y);
+	movePlayer.setZ(data.z);
 
 	// Broadcast updated position to connected socket clients
-	this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY()});
+	this.broadcast.emit("move player", {
+        id: movePlayer.id,
+        x: movePlayer.getX(),
+        y: movePlayer.getY(),
+        z: movePlayer.getZ()
+    });
 };
 
 

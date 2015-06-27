@@ -1,4 +1,7 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
+var width = window.innerWidth;
+var height = window.innerHeight;
+
+var game = new Phaser.Game(width, height, Phaser.AUTO, '', {
     preload: preload,
     create: create,
     update: update,
@@ -13,8 +16,19 @@ var currentSpeed = 0;
 var cursors;
 
 function preload () {
+    game.time.advancedTiming = true;
+
+    // Add the Isometric plug-in to Phaser
+    game.plugins.add(new Phaser.Plugin.Isometric(game));
+
     map = new Map(game);
     map.preload();
+
+    // Start the physical system
+	game.physics.startSystem(Phaser.Plugin.Isometric.ISOARCADE);
+
+    // set the middle of the world in the middle of the screen
+	game.iso.anchor.setTo(0.5, 0);
 
     player = new LocalPlayer(game, map);
     player.preload();
@@ -24,18 +38,18 @@ function create () {
     socket = io.connect(SERVER_URL);
 
     //  We're going to be using physics, so enable the Arcade Physics system
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    // game.physics.startSystem(Phaser.Physics.ARCADE);
 
     map.create();
 
     // The base of our player
-    var x = Math.round(Math.random()*(1000)-500);
-    var y = Math.round(Math.random()*(1000)-500);
-    player.create("foobar", x, y);
+    var x = Math.round(Math.random()*(200));
+    var y = Math.round(Math.random()*(200));
+    player.create("foobar", x, y, 0);
 
-    game.camera.follow(player.sprite);
-    game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
-    game.camera.focusOnXY(0, 0);
+    // game.camera.follow(player.sprite);
+    // game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
+    // game.camera.focusOnXY(0, 0);
 
     cursors = game.input.keyboard.createCursorKeys();
 
@@ -44,12 +58,12 @@ function create () {
 }
 
 function update() {
-    map.update();
     player.update();
+    map.update();
 }
 
 function render() {
-
+    game.debug.body(player.sprite);
 }
 
 // Find player by ID
@@ -86,8 +100,9 @@ function onSocketConnected() {
 
     // Send local player data to the game server
     socket.emit("new player", {
-        x: player.sprite.x,
-        y: player.sprite.y
+        x: player.sprite.isoX,
+        y: player.sprite.isoY,
+        z: player.sprite.isoZ
     });
 };
 
@@ -99,11 +114,11 @@ function onSocketDisconnect() {
 // New player
 function onNewPlayer(data) {
     console.log("New player connected: " + data.id);
-
+    console.log("player", data);
     // Add new player to the remote players array
     var newPlayer = new Player(game, map);
     newPlayer.preload();
-    newPlayer.create(data.id, data.x, data.y);
+    newPlayer.create(data.id, data.x, data.y, data.z);
 
     remotePlayers.push(newPlayer);
 };
@@ -119,8 +134,8 @@ function onMovePlayer(data) {
     };
 
     // Update player position
-    movePlayer.sprite.x = data.x;
-    movePlayer.sprite.y = data.y;
+    movePlayer.sprite.isoPosition.setTo(data.x, data.y, data.z);
+    console.log("x", movePlayer.sprite.isoX);
 
 };
 
