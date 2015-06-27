@@ -64,7 +64,9 @@ function update() {
     map.update();
 
     if(space.isDown) {
-        console.log("after update", remotePlayers[0].sprite.isoPosition.set(160, 160, 2));
+        // var x = Math.round(Math.random()*(200));
+        // var y = Math.round(Math.random()*(200));
+        // console.log("after update", map.thing.isoPosition.set(map.thing.isoPosition.x + 1, map.thing.isoPosition.y + 1, 2));
     }
 }
 
@@ -139,10 +141,13 @@ function onMovePlayer(data) {
         return;
     };
 
+    // Update player position during next update loop
+    movePlayer.nextPosition = data;
+
     // Update player position
-    movePlayer.sprite.isoPosition.setTo(data.x, data.y, data.z);
-    console.log("data", data);
-    console.log("pos", movePlayer.sprite.isoPosition);
+    // movePlayer.sprite.isoPosition.setTo(data.x, data.y, data.z);
+    // console.log("data", data);
+    // console.log("pos", movePlayer.sprite.isoPosition);
 
 };
 

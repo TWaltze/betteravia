@@ -8,6 +8,10 @@ LocalPlayer.prototype.constructor = LocalPlayer;
 LocalPlayer.prototype.create = function(index, x, y, z) {
     Player.prototype.create.call(this, index, x, y, z);
 
+    this.game.physics.isoArcade.enable(this.sprite);
+    this.sprite.body.collideWorldBounds = true;
+    this.sprite.body.immovable = true;
+
     this.game.camera.follow(this.sprite);
 
     // this.sprite.body.maxVelocity.setTo(400, 400);
@@ -62,43 +66,81 @@ LocalPlayer.prototype.update = function() {
 
     // Move the player
     var speed = 200;
+    var animation = null;
+    var velocity = {
+        x: 0,
+        y: 0,
+        z: 0
+    };
 
     if (cursors.down.isDown && cursors.right.isDown) {
-        this.sprite.body.velocity.x = speed;
-        this.sprite.body.velocity.y = 0;
-        this.sprite.animations.play('SE');
+        velocity.x = speed;
+        animation = 'SE';
     } else if (cursors.down.isDown && cursors.left.isDown) {
-        this.sprite.body.velocity.y = speed;
-        this.sprite.body.velocity.x = 0;
-        this.sprite.animations.play('SW');
+        velocity.y = speed;
+        animation = 'SW';
     } else if (cursors.up.isDown && cursors.left.isDown) {
-        this.sprite.body.velocity.x = -speed;
-        this.sprite.body.velocity.y = 0;
-        this.sprite.animations.play('NW');
+        velocity.x = -speed;
+        animation = 'NW';
     } else if (cursors.up.isDown && cursors.right.isDown) {
-        this.sprite.body.velocity.y = -speed;
-        this.sprite.body.velocity.x = 0;
-        this.sprite.animations.play('NE');
-    }else if (cursors.up.isDown) {
-    	this.sprite.body.velocity.y = -speed;
-        this.sprite.body.velocity.x = -speed;
-        this.sprite.animations.play('N');
+        velocity.y = -speed;
+        animation = 'NE';
+    } else if (cursors.up.isDown) {
+        velocity.x = -speed;
+        velocity.y = -speed
+        animation = 'N';
     } else if (cursors.down.isDown) {
-        this.sprite.body.velocity.y = speed;
-        this.sprite.body.velocity.x = speed;
-        this.sprite.animations.play('S');
+        velocity.x = speed;
+        velocity.y = speed
+        animation = 'S';
     } else if (cursors.right.isDown) {
-        this.sprite.body.velocity.x = speed;
-        this.sprite.body.velocity.y = -speed;
-        this.sprite.animations.play('E');
+        velocity.x = speed;
+        velocity.y = -speed
+        animation = 'E';
     } else if (cursors.left.isDown) {
-        this.sprite.body.velocity.x = -speed;
-        this.sprite.body.velocity.y = speed;
-        this.sprite.animations.play('W');
-    } else {
-        this.sprite.body.velocity.x = 0;
-        this.sprite.body.velocity.y = 0;
+        velocity.x = -speed;
+        velocity.y = speed
+        animation = 'W';
+    }
+
+    // var pointerAngle = game.physics.arcade.angleToPointer(this.sprite);
+    //
+    // if (0.5 < pointerAngle && pointerAngle < 1 && cursors.up.isDown) {
+    //     velocity.x = speed;
+    //     animation = 'SE';
+    // } else if (2 < pointerAngle && pointerAngle < 2.5 && cursors.up.isDown) {
+    //     velocity.y = speed;
+    //     animation = 'SW';
+    // } else if (-2.5 < pointerAngle && pointerAngle < -2 && cursors.up.isDown) {
+    //     velocity.x = -speed;
+    //     animation = 'NW';
+    // } else if (-1 < pointerAngle && pointerAngle < -0.5 && cursors.up.isDown) {
+    //     velocity.y = -speed;
+    //     animation = 'NE';
+    // } else if (-2 < pointerAngle && pointerAngle < -1 && cursors.up.isDown) {
+    //     velocity.x = -speed;
+    //     velocity.y = -speed
+    //     animation = 'N';
+    // } else if (1 < pointerAngle && pointerAngle < 2 && cursors.up.isDown) {
+    //     velocity.x = speed;
+    //     velocity.y = speed
+    //     animation = 'S';
+    // } else if (-0.5 < pointerAngle && pointerAngle < 0.5 && cursors.up.isDown) {
+    //     velocity.x = speed;
+    //     velocity.y = -speed
+    //     animation = 'E';
+    // } else if (2.5 < pointerAngle || pointerAngle < -2.5 && cursors.up.isDown) {
+    //     velocity.x = -speed;
+    //     velocity.y = speed
+    //     animation = 'W';
+    // }
+
+    this.sprite.body.velocity.x = velocity.x;
+    this.sprite.body.velocity.y = velocity.y;
+    if (velocity.x === 0 && velocity.y === 0) {
         this.sprite.animations.stop();
+    } else {
+        this.sprite.animations.play(animation);
     }
 
     socket.emit("move player", this.sprite.isoPosition);

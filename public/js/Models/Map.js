@@ -3,6 +3,8 @@ Map = function(game) {
     this.land = null;
     this.width = 2048 * .5;
     this.height = 1024 * .5;
+
+    this.thing = null;
 }
 
 Map.prototype = {
@@ -134,6 +136,23 @@ Map.prototype = {
         //         rock.body.drag.set(100, 100, 0);
         //     }
         // }
+
+        // this.thing = this.game.add.isoSprite(80, 80, 0, 'rock', 0);
+        // this.thing.anchor.set(0.5);
+        //
+        // // Let the physics engine do its job on this tile type
+        // this.game.physics.isoArcade.enable(this.thing);
+        //
+        // // This will prevent our physic bodies from going out of the screen
+        // this.thing.body.collideWorldBounds = true;
+        // this.thing.body.immovable = true;
+        // this.thing.body.maxVelocity.setTo(0, 0);
+        // this.thing.body.bounce.set(0, 0, 0);
+        // set the physics bounce amount on each axis  (X, Y, Z)
+        // this.thing.body.bounce.set(0.2, 0.2, 0);
+
+        // set the slow down rate on each axis (X, Y, Z)
+        // this.thing.body.drag.set(100, 100, 0);
     },
 
     update: function() {

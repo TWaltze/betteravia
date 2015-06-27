@@ -44,25 +44,23 @@ Player.prototype = {
         this.sprite.anchor.set(0.5);
 
         // enable physics on the player
-        this.game.physics.isoArcade.enable(this.sprite);
-        this.sprite.body.collideWorldBounds = true;
-        this.sprite.body.immovable = true;
+        // this.game.physics.isoArcade.enable(this.sprite);
+        // this.sprite.body.collideWorldBounds = true;
+        // this.sprite.body.immovable = true;
 
         this.id = index.toString();
         this.health = 3;
         this.alive = true;
 
-        this.lastPosition = this.sprite.isoPosition;
+        this.nextPosition = null;
     },
 
     update: function() {
-        if(this.sprite.isoPosition.equals(this.lastPosition)) {
-            // this.sprite.play('move');
-            // this.sprite.rotation = Math.PI + game.physics.arcade.angleToXY(this.sprite, this.lastPosition.x, this.lastPosition.y);
+        if (this.nextPosition) {
+            this.sprite.isoPosition.setTo(this.nextPosition.x, this.nextPosition.y, this.nextPosition.z);
+            this.nextPosition = null;
         } else {
             // this.sprite.play('stop');
         }
-
-        this.lastPosition = this.sprite.isoPosition;
     }
 }
