@@ -60,18 +60,18 @@ Map.prototype = {
     },
 
     create: function() {
-        // set the Background color of our game
+        // Set the Background color for this map
     	this.game.stage.backgroundColor = "0xde6712";
 
         this.floorGroup = this.game.add.group();
-        this.itemGroup = this.game.add.group();
         this.grassGroup = this.game.add.group();
         this.obstacleGroup = this.game.add.group();
+        this.itemGroup = this.game.add.group();
 
-        // set the gravity in our game
-    	game.physics.isoArcade.gravity.setTo(0, 0, -500);
+        // Set the gravity for this map
+    	this.game.physics.isoArcade.gravity.setTo(0, 0, -500);
 
-        // create the floor tiles
+        // Create the floor tiles
         var floorTile;
         for (var xt = 0; xt < this.mapSize * this.tileSize; xt += this.tileSize) {
             for (var yt = 0; yt < this.mapSize * this.tileSize; yt += this.tileSize) {
@@ -80,7 +80,7 @@ Map.prototype = {
             }
         }
 
-        // create the grass tiles randomly
+        // Create the grass tiles randomly
         var grassTile;
         for (var xt = 0; xt < this.mapSize * this.tileSize; xt += this.tileSize) {
 	        for (var yt = 0; yt < this.mapSize * this.tileSize; yt += this.tileSize) {
@@ -104,20 +104,13 @@ Map.prototype = {
             }
         }
 
+        // Add obstacles
         var obstacle;
         for (var yt = 0; yt < this.level.length; yt++) {
             var tile = this.level[yt];
 
             for (var xt = 0; xt < this.level[yt].length; xt++) {
-                var obstacleType = null;
-
-                if (tile[xt] == 1) {
-                    obstacleType = 'cactus1';
-                } else if (tile[xt] == 2) {
-                    obstacleType = 'cactus2';
-                } else if (tile[xt] == 3) {
-                    obstacleType = 'rock'
-                }
+                var obstacleType = obstacleLookup(tile[xt]);
 
                 if (obstacleType) {
                     obstacle = this.game.add.isoSprite(xt * this.tileSize, yt * this.tileSize, 0, obstacleType, 0, this.obstacleGroup);
@@ -157,6 +150,20 @@ Map.prototype = {
     update: function() {
         this.game.physics.isoArcade.collide(this.obstacleGroup);
         this.game.iso.topologicalSort(this.obstacleGroup);
+    }
+}
+
+function obstacleLookup(id) {
+    var obstacles = {
+        1: 'cactus1',
+        2: 'cactus2',
+        3: 'rock'
+    };
+
+    if (obstacles[id]) {
+        return obstacles[id];
+    } else {
+        return null;
     }
 }
 

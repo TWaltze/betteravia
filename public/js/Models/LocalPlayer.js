@@ -145,3 +145,7 @@ LocalPlayer.prototype.update = function() {
 
     socket.emit("move player", this.sprite.isoPosition);
 }
+
+LocalPlayer.prototype.render = function() {
+    this.game.debug.body(this.sprite);
+}

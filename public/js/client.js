@@ -71,7 +71,7 @@ function update() {
 }
 
 function render() {
-    game.debug.body(player.sprite);
+    player.render();
 }
 
 // Find player by ID
