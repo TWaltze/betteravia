@@ -52,14 +52,14 @@ Betteravia.Player.prototype = {
 
         this.sprite = this.game.add.sprite(x, y, 'player', 0);
 
-        this.sprite.animations.add('N', [193, 194, 195, 196, 197, 198, 199, 200], 12, true);
-        this.sprite.animations.add('NW', [217, 218, 219, 220, 221, 222, 223, 224], 12, true);
-        this.sprite.animations.add('W', [217, 218, 219, 220, 221, 222, 223, 224], 12, true);
-        this.sprite.animations.add('SW', [217, 218, 219, 220, 221, 222, 223, 224], 12, true);
-        this.sprite.animations.add('S', [241, 242, 243, 244, 245, 246, 247, 248], 12, true);
-        this.sprite.animations.add('SE', [265, 266, 267, 268, 269, 270, 271, 272], 12, true);
-        this.sprite.animations.add('E', [265, 266, 267, 268, 269, 270, 271, 272], 12, true);
-        this.sprite.animations.add('NE', [265, 266, 267, 268, 269, 270, 271, 272], 12, true);
+        this.sprite.animations.add('N', [193, 194, 195, 196, 197, 198, 199, 200], 18, true);
+        this.sprite.animations.add('NW', [217, 218, 219, 220, 221, 222, 223, 224], 18, true);
+        this.sprite.animations.add('W', [217, 218, 219, 220, 221, 222, 223, 224], 18, true);
+        this.sprite.animations.add('SW', [217, 218, 219, 220, 221, 222, 223, 224], 18, true);
+        this.sprite.animations.add('S', [241, 242, 243, 244, 245, 246, 247, 248], 18, true);
+        this.sprite.animations.add('SE', [265, 266, 267, 268, 269, 270, 271, 272], 18, true);
+        this.sprite.animations.add('E', [265, 266, 267, 268, 269, 270, 271, 272], 18, true);
+        this.sprite.animations.add('NE', [265, 266, 267, 268, 269, 270, 271, 272], 18, true);
 
         this.sprite.name = index.toString();
 
