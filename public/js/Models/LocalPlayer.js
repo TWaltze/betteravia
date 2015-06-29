@@ -76,33 +76,33 @@ Betteravia.LocalPlayer.prototype.update = function() {
     };
 
     if (Betteravia.cursors.down.isDown && Betteravia.cursors.right.isDown) {
-        velocity.x = speed;
         animation = 'SE';
     } else if (Betteravia.cursors.down.isDown && Betteravia.cursors.left.isDown) {
-        velocity.y = speed;
         animation = 'SW';
     } else if (Betteravia.cursors.up.isDown && Betteravia.cursors.left.isDown) {
-        velocity.x = -speed;
         animation = 'NW';
     } else if (Betteravia.cursors.up.isDown && Betteravia.cursors.right.isDown) {
-        velocity.y = -speed;
         animation = 'NE';
     } else if (Betteravia.cursors.up.isDown) {
-        velocity.x = -speed;
-        velocity.y = -speed
         animation = 'N';
     } else if (Betteravia.cursors.down.isDown) {
-        velocity.x = speed;
-        velocity.y = speed
         animation = 'S';
     } else if (Betteravia.cursors.right.isDown) {
-        velocity.x = speed;
-        velocity.y = -speed
         animation = 'E';
     } else if (Betteravia.cursors.left.isDown) {
-        velocity.x = -speed;
-        velocity.y = speed
         animation = 'W';
+    }
+
+    if (Betteravia.cursors.up.isDown) {
+        velocity.y = -speed;
+    } else if (Betteravia.cursors.down.isDown) {
+        velocity.y = speed;
+    }
+
+    if (Betteravia.cursors.left.isDown) {
+        velocity.x = -speed;
+    } else if (Betteravia.cursors.right.isDown) {
+        velocity.x = speed;
     }
 
     // var pointerAngle = game.physics.arcade.angleToPointer(this.sprite);
