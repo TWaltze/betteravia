@@ -1,14 +1,14 @@
-Player = function (game, map) {
+Betteravia.Player = function (game) {
+    console.log("called Player");
     this.game = game;
-    this.map = map;
     this.sprite = null;
 };
 
-Player.prototype = {
+Betteravia.Player.prototype = {
     preload: function() {
         // game.load.spritesheet('dude', 'public/assets/dude.png', 64, 64);
 
-        game.load.spritesheet('characterAnim', 'public/images/tiles/characterAnim.png', 70, 74);
+        this.game.load.spritesheet('characterAnim', 'public/images/tiles/characterAnim.png', 70, 74);
     },
 
     create: function(index, x, y, z) {
@@ -25,7 +25,8 @@ Player.prototype = {
         // this.sprite.angle = game.rnd.angle();
 
         // Create the player
-        this.sprite = this.game.add.isoSprite(x, y, z, 'characterAnim', 0, this.map.obstacleGroup);
+        console.log("Player", this);
+        this.sprite = this.game.add.sprite(x, y, 'characterAnim', 0);
 
         this.sprite.alpha = 0.6;
 
@@ -41,12 +42,19 @@ Player.prototype = {
         this.sprite.animations.add('E', [48, 49, 50, 51, 52, 53, 54, 55], 10, true);
         this.sprite.animations.add('SE', [56, 57, 58, 59, 60, 61, 62, 63], 10, true);
 
-        this.sprite.anchor.set(0.5);
+        // this.sprite.anchor.set(0.5);
 
         // enable physics on the player
         // this.game.physics.isoArcade.enable(this.sprite);
         // this.sprite.body.collideWorldBounds = true;
         // this.sprite.body.immovable = true;
+
+
+
+        this.game.physics.arcade.enable(this.sprite);
+        this.sprite.body.setSize(20, 20, 0, 20);
+
+
 
         this.id = index.toString();
         this.health = 3;

@@ -1,36 +1,38 @@
-function LocalPlayer(game, map) {
-    Player.call(this, game, map);
+function LocalPlayer(game) {
+    console.log("call right one");
+    Betteravia.Player.call(this, game);
 }
 
-LocalPlayer.prototype = Object.create(Player.prototype);
-LocalPlayer.prototype.constructor = LocalPlayer;
+Betteravia.LocalPlayer = LocalPlayer;
+Betteravia.LocalPlayer.prototype = Object.create(Betteravia.Player.prototype);
+Betteravia.LocalPlayer.prototype.constructor = LocalPlayer;
 
-LocalPlayer.prototype.create = function(index, x, y, z) {
-    Player.prototype.create.call(this, index, x, y, z);
+Betteravia.LocalPlayer.prototype.create = function(index, x, y, z) {
+    Betteravia.Player.prototype.create.call(this, index, x, y, z);
 
-    this.game.physics.isoArcade.enable(this.sprite);
-    this.sprite.body.collideWorldBounds = true;
-    this.sprite.body.immovable = true;
+    // this.game.physics.isoArcade.enable(this.sprite);
+    // this.sprite.body.collideWorldBounds = true;
+    // this.sprite.body.immovable = true;
 
     this.game.camera.follow(this.sprite);
 
     // this.sprite.body.maxVelocity.setTo(400, 400);
-    this.sprite.body.immovable = false;
+    // this.sprite.body.immovable = false;
     // this.sprite.bringToTop();
 }
 
-LocalPlayer.prototype.update = function() {
+Betteravia.LocalPlayer.prototype.update = function() {
     var _self = this;
 
-    remotePlayers.forEach(function(p) {
-        if (p.alive) {
-            p.update();
-            if(space.isDown) {
-                console.log("after update", p.sprite.isoPosition);
-            }
-            // game.physics.arcade.collide(_self.sprite, p.sprite);
-        }
-    });
+    // remotePlayers.forEach(function(p) {
+    //     if (p.alive) {
+    //         p.update();
+    //         if(space.isDown) {
+    //             console.log("after update", p.sprite.isoPosition);
+    //         }
+    //         // game.physics.arcade.collide(_self.sprite, p.sprite);
+    //     }
+    // });
 
     // if (cursors.left.isDown) {
     //     player.sprite.angle -= 4;
@@ -73,31 +75,31 @@ LocalPlayer.prototype.update = function() {
         z: 0
     };
 
-    if (cursors.down.isDown && cursors.right.isDown) {
+    if (Betteravia.cursors.down.isDown && Betteravia.cursors.right.isDown) {
         velocity.x = speed;
         animation = 'SE';
-    } else if (cursors.down.isDown && cursors.left.isDown) {
+    } else if (Betteravia.cursors.down.isDown && Betteravia.cursors.left.isDown) {
         velocity.y = speed;
         animation = 'SW';
-    } else if (cursors.up.isDown && cursors.left.isDown) {
+    } else if (Betteravia.cursors.up.isDown && Betteravia.cursors.left.isDown) {
         velocity.x = -speed;
         animation = 'NW';
-    } else if (cursors.up.isDown && cursors.right.isDown) {
+    } else if (Betteravia.cursors.up.isDown && Betteravia.cursors.right.isDown) {
         velocity.y = -speed;
         animation = 'NE';
-    } else if (cursors.up.isDown) {
+    } else if (Betteravia.cursors.up.isDown) {
         velocity.x = -speed;
         velocity.y = -speed
         animation = 'N';
-    } else if (cursors.down.isDown) {
+    } else if (Betteravia.cursors.down.isDown) {
         velocity.x = speed;
         velocity.y = speed
         animation = 'S';
-    } else if (cursors.right.isDown) {
+    } else if (Betteravia.cursors.right.isDown) {
         velocity.x = speed;
         velocity.y = -speed
         animation = 'E';
-    } else if (cursors.left.isDown) {
+    } else if (Betteravia.cursors.left.isDown) {
         velocity.x = -speed;
         velocity.y = speed
         animation = 'W';
@@ -143,9 +145,9 @@ LocalPlayer.prototype.update = function() {
         this.sprite.animations.play(animation);
     }
 
-    socket.emit("move player", this.sprite.isoPosition);
+    // socket.emit("move player", this.sprite.isoPosition);
 }
 
-LocalPlayer.prototype.render = function() {
+Betteravia.LocalPlayer.prototype.render = function() {
     this.game.debug.body(this.sprite);
 }
