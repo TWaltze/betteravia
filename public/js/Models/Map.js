@@ -245,6 +245,20 @@ Betteravia.Map.prototype = {
     update: function() {
         // this.game.physics.isoArcade.collide(this.obstacleGroup);
         // this.game.iso.topologicalSort(this.obstacleGroup);
+
+        // Check if we're overlapping the door.
+        this.game.physics.arcade.overlap(Betteravia.player.sprite, this.doorGroup, Betteravia.Map.Object.Door.handler, null, this);
+        if (this.isOutdoors) {
+            this.game.physics.arcade.collide(Betteravia.player.sprite, this.outdoor_walls);
+        } else {
+            this.game.physics.arcade.collide(Betteravia.player.sprite, this.indoor_walls);
+        }
+    },
+
+    render: function() {
+        // this.inCollisionObjects.forEach(function(obj) {
+        //     Betteravia.map.game.game.debug.body(obj);
+        // });
     }
 }
 

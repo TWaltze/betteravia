@@ -18,6 +18,22 @@ Betteravia.Map.Object.Door = function(game, sprite) {
 Betteravia.Map.Object.Door.init = function(game) {
 };
 
+// This is called by the physics overlap function during the update
+Betteravia.Map.Object.Door.handler = function(player, doorSprite) {
+    // console.log("player", player);
+    // console.log("door", door);
+    // console.log("this", this);
+    var door = this.doors[doorSprite.properties.id];
+
+    // This will update the doors "delta", telling us how far over the player is.
+    door.overlapTrigger(player);
+
+    var alpha = door.delta;
+    this.subMaps[doorSprite.properties.parent].setIndoorAlpha(alpha);
+    this.subMaps[doorSprite.properties.parent].setOutdoorAlpha(1 - alpha);
+    this.isOutdoors = !door.isOpen();
+};
+
 Betteravia.Map.Object.Door.prototype = {
     isOpen: function() {
         return this.delta !== 0;

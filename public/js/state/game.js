@@ -56,5 +56,11 @@ Betteravia.State.Game.prototype = {
         // }
 
         Betteravia.player.update();
+        Betteravia.map.update();
+    },
+
+    render: function() {
+        Betteravia.player.render();
+        Betteravia.map.render();
     }
 };
