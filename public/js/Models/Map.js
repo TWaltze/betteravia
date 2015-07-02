@@ -53,6 +53,17 @@ Betteravia.Map = function(game) {
     this.subMaps = {};
     this.overworld = this.land[0];
     this.ground = null;
+
+    this.MAP_KEYS = {
+        door: 'door',
+        ground: 'ground',
+        subMap: 'sub_map',
+        collision: {
+            general: 'collision',
+            indoor: 'collision_indoors',
+            outdoor: 'collision_outdoors'
+        }
+    };
 }
 
 Betteravia.Map.prototype = {
@@ -172,13 +183,13 @@ Betteravia.Map.prototype = {
         }
 
         // We manually add the over world ground for now...
-        this.ground = this.modules[this.overworld].createLayer('ground');
+        this.ground = this.modules[this.overworld].createLayer(this.MAP_KEYS.ground);
 
         // Resize the game world to match the layer dimensions
         this.ground.resizeWorld();
 
         // Place the subMaps
-        var subMapLocations = this.modules[this.overworld].findObjectsByType('sub_map');
+        var subMapLocations = this.modules[this.overworld].findObjectsByType(this.MAP_KEYS.subMap);
         var location, tileX, tileY;
         for (var i = 0; i < subMapLocations.length; i++) {
             location = subMapLocations[i];
@@ -190,13 +201,14 @@ Betteravia.Map.prototype = {
                 tileX,
                 tileY
             );
+
+            this.subMaps[location.name].setIndoorAlpha(0);
         }
 
-        this.subMaps['home0'].setIndoorAlpha(0);
 
         // Place some objects
         this.doorGroup = this.game.add.group();
-        var tiledDoors = this.modules[this.overworld].findObjectsByType('door');
+        var tiledDoors = this.modules[this.overworld].findObjectsByType(this.MAP_KEYS.door);
         this.doors = {};
         var doorSprite = this.modules[this.overworld].spriteFromObject(tiledDoors[0], this.doorGroup);
         Betteravia.Map.Object.Door.init(this.game);
@@ -204,13 +216,38 @@ Betteravia.Map.prototype = {
 
         // Collision map!
         this.isOutdoors = true;
-        this.indoor_walls = this.game.add.group();
-        this.outdoor_walls = this.game.add.group();
-        var home0 = this.subMaps['home0'];
-        this.inCollisionObjects = this.modules['house0_f0'].getCollisionSprites(
-            'collision_indoors', this.indoor_walls, home0.tileX, home0.tileY);
-        this.outCollisionObjects = this.modules['house0_f0'].getCollisionSprites(
-            'collision_outdoors', this.outdoor_walls, home0.tileX, home0.tileY);
+        this.indoorCollision = this.game.add.group();
+        this.outdoorCollision = this.game.add.group();
+        this.generalCollision = this.game.add.group();
+
+        for (var key in this.subMaps) {
+            if (!this.subMaps.hasOwnProperty(key)) {
+                continue;
+            }
+
+            var sub = this.subMaps[key];
+
+            sub.module.getCollisionSprites(
+                this.MAP_KEYS.collision.indoor,
+                this.indoorCollision,
+                sub.tileX,
+                sub.tileY
+            );
+
+            sub.module.getCollisionSprites(
+                this.MAP_KEYS.collision.outdoor,
+                this.outdoorCollision,
+                sub.tileX,
+                sub.tileY
+            );
+
+            sub.module.getCollisionSprites(
+                this.MAP_KEYS.collision.general,
+                this.generalCollision,
+                sub.tileX,
+                sub.tileY
+            );
+        }
     },
 
     // Many of the maps use the same tile images. We create a map of all these images
@@ -249,9 +286,9 @@ Betteravia.Map.prototype = {
         // Check if we're overlapping the door.
         this.game.physics.arcade.overlap(Betteravia.player.sprite, this.doorGroup, Betteravia.Map.Object.Door.handler, null, this);
         if (this.isOutdoors) {
-            this.game.physics.arcade.collide(Betteravia.player.sprite, this.outdoor_walls);
+            this.game.physics.arcade.collide(Betteravia.player.sprite, this.outdoorCollision);
         } else {
-            this.game.physics.arcade.collide(Betteravia.player.sprite, this.indoor_walls);
+            this.game.physics.arcade.collide(Betteravia.player.sprite, this.indoorCollision);
         }
     },
 

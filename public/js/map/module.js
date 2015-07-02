@@ -42,6 +42,12 @@ Betteravia.Map.Module.prototype = {
     },
 
     getCollisionSprites: function(layer, group, tileX, tileY) {
+        // Check if there are any objects in this layer.
+        // If not, exit.
+        if (!this.tilemap.objects[layer]) {
+            return;
+        }
+
         tileX = tileX || 0;
         tileY = tileY || 0;
 
