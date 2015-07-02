@@ -20,6 +20,7 @@ Betteravia.Map = function(game) {
     this.MAP_KEYS = {
         door: 'door',
         ground: 'ground',
+        obstacles: 'obstacles',
         subMap: 'sub_map',
         collision: {
             general: 'collision',
@@ -52,9 +53,11 @@ Betteravia.Map.prototype = {
 
         // We manually add the over world ground for now...
         this.ground = this.modules[this.overworld].createLayer(this.MAP_KEYS.ground);
+        this.obstacles = this.modules[this.overworld].createLayer(this.MAP_KEYS.obstacles);
 
         // Resize the game world to match the layer dimensions
         this.ground.resizeWorld();
+        this.obstacles.resizeWorld();
 
         // Place the subMaps
         var subMapLocations = this.modules[this.overworld].findObjectsByType(this.MAP_KEYS.subMap);
@@ -118,6 +121,21 @@ Betteravia.Map.prototype = {
                 sub.tileY
             );
         }
+
+        this.modules[this.overworld].getCollisionSprites(
+            this.MAP_KEYS.collision.indoor,
+            this.indoorCollision
+        );
+
+        this.modules[this.overworld].getCollisionSprites(
+            this.MAP_KEYS.collision.outdoor,
+            this.outdoorCollision
+        );
+
+        this.modules[this.overworld].getCollisionSprites(
+            this.MAP_KEYS.collision.general,
+            this.generalCollision
+        );
     },
 
     // Many of the maps use the same tile images. We create a map of all these images
@@ -152,6 +170,9 @@ Betteravia.Map.prototype = {
     update: function() {
         // Check if we're overlapping the door.
         this.game.physics.arcade.overlap(Betteravia.player.sprite, this.doorGroup, Betteravia.Map.Object.Door.handler, null, this);
+
+        this.game.physics.arcade.collide(Betteravia.player.sprite, this.generalCollision);
+
         if (this.isOutdoors) {
             this.game.physics.arcade.collide(Betteravia.player.sprite, this.outdoorCollision);
         } else {
@@ -160,7 +181,7 @@ Betteravia.Map.prototype = {
     },
 
     render: function() {
-        // this.inCollisionObjects.forEach(function(obj) {
+        // this.generalCollision.children.forEach(function(obj) {
         //     Betteravia.map.game.game.debug.body(obj);
         // });
     }
