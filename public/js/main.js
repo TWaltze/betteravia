@@ -1,5 +1,8 @@
 Betteravia.main = function() {
-    var game = new Phaser.Game(1280, 720, Phaser.AUTO);
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    var game = new Phaser.Game(width, height, Phaser.AUTO);
 
     game.state.add('startup', Betteravia.State.Startup);
     game.state.add('preloader', Betteravia.State.Preloader);

@@ -64,6 +64,7 @@ Betteravia.Player.prototype = {
         this.sprite.name = index.toString();
 
         this.game.physics.arcade.enable(this.sprite);
+        this.sprite.body.collideWorldBounds = true;
         this.sprite.body.setSize(32, 32, 16, 32);
 
 

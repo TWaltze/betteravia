@@ -32,7 +32,7 @@ Betteravia.Map = function(game) {
 
 Betteravia.Map.prototype = {
     preload: function() {
-        this.game.world.setBounds(0, 0, this.width, this.height);
+        // this.game.world.setBounds(0, 0, this.width, this.height);
 
         // Load the json maps, so we can load the images in the next steps.
         var map;
@@ -55,9 +55,8 @@ Betteravia.Map.prototype = {
         this.ground = this.modules[this.overworld].createLayer(this.MAP_KEYS.ground);
         this.obstacles = this.modules[this.overworld].createLayer(this.MAP_KEYS.obstacles);
 
-        // Resize the game world to match the layer dimensions
+        // Resize the game world and its bounding to match the layer's dimensions
         this.ground.resizeWorld();
-        this.obstacles.resizeWorld();
 
         // Place the subMaps
         var subMapLocations = this.modules[this.overworld].findObjectsByType(this.MAP_KEYS.subMap);
