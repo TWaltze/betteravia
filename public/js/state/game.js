@@ -1,7 +1,3 @@
-/**
- * Created by knash on 15-03-12.
- */
-
 Betteravia.State.Game = function(game) {};
 Betteravia.State.Game.prototype = {
     create: function() {
@@ -62,5 +58,7 @@ Betteravia.State.Game.prototype = {
     render: function() {
         Betteravia.player.render();
         Betteravia.map.render();
+
+        this.game.debug.text(this.game.time.fps || '--', 2, 14, "#00ff00");
     }
 };

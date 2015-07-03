@@ -54,9 +54,13 @@ Betteravia.Map.Module.prototype = {
         var self = this;
         var result = [];
         var sprite;
-        this.tilemap.objects[layer].forEach(function(element) {
+        this.tilemap.objects[layer].forEach(function(e) {
+            // Clone object so you don't screw with original properties.
+            // Modules may be reused.
+            var element = _.cloneDeep(e);
+
             element.y -= self.tilemap.tileHeight;
-            sprite = group.create(element.x + tileX*32, element.y + tileY*32);
+            sprite = group.create(element.x + tileX * 32, element.y + tileY * 32);
             self.game.physics.arcade.enable(sprite);
             sprite.body.setSize(element.properties.width, element.properties.height);
             sprite.body.immovable = true;

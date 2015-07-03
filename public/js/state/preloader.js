@@ -7,6 +7,8 @@ Betteravia.State.Preloader.prototype = {
         // Black loading screen
         this.game.stage.backgroundColor = '#000000';
 
+        this.game.time.advancedTiming = true;
+
         this.game.add.sprite(492, 175, 'loading_text');
         this.game.add.sprite(120, 580, 'loading_bar_bg');
         this.preloadBar = this.add.sprite(140, 600, 'loading_bar');

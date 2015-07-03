@@ -81,9 +81,11 @@ Betteravia.Map.prototype = {
         this.doorGroup = this.game.add.group();
         var tiledDoors = this.modules[this.overworld].findObjectsByType(this.MAP_KEYS.door);
         this.doors = {};
-        var doorSprite = this.modules[this.overworld].spriteFromObject(tiledDoors[0], this.doorGroup);
-        Betteravia.Map.Object.Door.init(this.game);
-        this.doors[doorSprite.properties.id] = new Betteravia.Map.Object.Door(this.game, doorSprite);
+        for (var i = 0; i < tiledDoors.length; i++) {
+            var doorSprite = this.modules[this.overworld].spriteFromObject(tiledDoors[i], this.doorGroup);
+            // Betteravia.Map.Object.Door.init(this.game);
+            this.doors[doorSprite.properties.id] = new Betteravia.Map.Object.Door(this.game, doorSprite);
+        }
 
         // Collision map!
         this.isOutdoors = true;
