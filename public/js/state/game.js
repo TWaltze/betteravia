@@ -8,8 +8,8 @@ Betteravia.State.Game.prototype = {
         Betteravia.map.create();
 
         // Make our player
-        var spawn = Betteravia.map.modules[Betteravia.map.overworld].findObjectsByType('player_spawn');
-        Betteravia.player.create('foobar', spawn[0].x + 4, spawn[0].y - 16, 0);
+        var spawn = Betteravia.map.getPlayerSpawnPoint();
+        Betteravia.player.create('foobar', spawn[0].x - 16, spawn[0].y - 32, 0);
 
         // Input
         Betteravia.cursors = this.game.input.keyboard.createCursorKeys();

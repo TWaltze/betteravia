@@ -22,6 +22,7 @@ Betteravia.Map = function(game) {
         ground: 'ground',
         obstacles: 'obstacles',
         subMap: 'sub_map',
+        playerSpawnPoint: 'player_spawn',
         collision: {
             general: 'collision',
             indoor: 'collision_indoors',
@@ -183,6 +184,10 @@ Betteravia.Map.prototype = {
         // this.generalCollision.children.forEach(function(obj) {
         //     Betteravia.map.game.game.debug.body(obj);
         // });
+    },
+
+    getPlayerSpawnPoint: function() {
+        return this.modules[this.overworld].findObjectsByType(this.MAP_KEYS.playerSpawnPoint);
     }
 }
 
