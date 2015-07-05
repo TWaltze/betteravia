@@ -14,10 +14,10 @@ Betteravia.State.Startup = function(game) {};
 Betteravia.State.Startup.prototype = {
     preload: function() {
         // Load our "loading" images
-        this.load.image('loading_text', 'public/assets/img/loading_text.png');
-        this.load.image('loading_bar_bg', 'public/assets/img/loading_bar_bg.png');
-        this.load.image('loading_bar', 'public/assets/img/loading_bar.png');
-        this.load.image('loading_bar_fg', 'public/assets/img/loading_bar_fg.png');
+        this.load.image('loading_text', 'public/assets/images/loading_text.png');
+        this.load.image('loading_bar_bg', 'public/assets/images/loading_bar_bg.png');
+        this.load.image('loading_bar', 'public/assets/images/loading_bar.png');
+        this.load.image('loading_bar_fg', 'public/assets/images/loading_bar_fg.png');
 
         // Load the json maps, so we can load the images in the next steps.
         Betteravia.map = new Betteravia.Map(this);

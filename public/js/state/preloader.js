@@ -17,8 +17,8 @@ Betteravia.State.Preloader.prototype = {
 
         // Load our sprites
         // this.load.image('player', 'res/img/sprites/player.png');
-        this.load.image('door', 'public/assets/img/sprites/door.png');
-        this.load.image('stairs', 'public/assets/img/sprites/stairs.png');
+        this.load.image('door', 'public/assets/images/sprites/door.png');
+        this.load.image('stairs', 'public/assets/images/sprites/stairs.png');
         Betteravia.player = new Betteravia.LocalPlayer(this.game);
         Betteravia.player.preload();
 

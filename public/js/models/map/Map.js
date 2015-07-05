@@ -6,7 +6,7 @@ Betteravia.Map = function(game) {
 
     this.land = [
         // Overworld maps
-        'home_village_f0',
+        'village_f0',
 
         // Modules used in maps
         'house0_f0'
@@ -19,7 +19,7 @@ Betteravia.Map = function(game) {
 
     this.MAP_KEYS = {
         door: 'door',
-        ground: 'ground',
+        ground: ['ground', 'ground0', 'ground1'],
         obstacles: 'obstacles',
         subMap: 'sub_map',
         playerSpawnPoint: 'player_spawn',
@@ -53,11 +53,19 @@ Betteravia.Map.prototype = {
         }
 
         // We manually add the over world ground for now...
-        this.ground = this.modules[this.overworld].createLayer(this.MAP_KEYS.ground);
+        this.ground = [];
+        for (var i = 0; i < this.MAP_KEYS.ground.length; i++) {
+            var g = this.modules[this.overworld].createLayer(this.MAP_KEYS.ground[i]);
+
+            if (g) {
+                this.ground.push(g);
+            }
+        }
+        // this.ground = this.modules[this.overworld].createLayer(this.MAP_KEYS.ground);
         this.obstacles = this.modules[this.overworld].createLayer(this.MAP_KEYS.obstacles);
 
         // Resize the game world and its bounding to match the layer's dimensions
-        this.ground.resizeWorld();
+        this.ground[0].resizeWorld();
 
         // Place the subMaps
         var subMapLocations = this.modules[this.overworld].findObjectsByType(this.MAP_KEYS.subMap);

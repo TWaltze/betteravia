@@ -9,7 +9,7 @@ Betteravia.Player.prototype = {
         // game.load.spritesheet('dude', 'public/assets/dude.png', 64, 64);
 
         this.game.load.spritesheet('characterAnim', 'public/images/tiles/characterAnim.png', 70, 74);
-        this.game.load.spritesheet('player', 'public/assets/img/sprites/character2.png', 64, 64);
+        this.game.load.spritesheet('player', 'public/assets/images/sprites/character2.png', 64, 64);
     },
 
     create: function(index, x, y, z) {
