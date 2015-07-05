@@ -20,7 +20,7 @@ Betteravia.Map = function(game) {
     this.MAP_KEYS = {
         door: 'door',
         ground: ['ground', 'ground0', 'ground1'],
-        obstacles: 'obstacles',
+        obstacles: ['obstacles0', 'obstacles1'],
         subMap: 'sub_map',
         playerSpawnPoint: 'player_spawn',
         collision: {
@@ -62,7 +62,14 @@ Betteravia.Map.prototype = {
             }
         }
         // this.ground = this.modules[this.overworld].createLayer(this.MAP_KEYS.ground);
-        this.obstacles = this.modules[this.overworld].createLayer(this.MAP_KEYS.obstacles);
+        this.obstacles = [];
+        for (var i = 0; i < this.MAP_KEYS.obstacles.length; i++) {
+            var o = this.modules[this.overworld].createLayer(this.MAP_KEYS.obstacles[i]);
+
+            if (g) {
+                this.obstacles.push(o);
+            }
+        }
 
         // Resize the game world and its bounding to match the layer's dimensions
         this.ground[0].resizeWorld();
