@@ -9,7 +9,7 @@ Betteravia.Map = function(game) {
         'village_f0',
 
         // Modules used in maps
-        'house0_f0'
+        'house1_f0'
     ];
 
     this.modules = {};
@@ -25,8 +25,8 @@ Betteravia.Map = function(game) {
         playerSpawnPoint: 'player_spawn',
         collision: {
             general: 'collision',
-            indoor: 'collision_indoors',
-            outdoor: 'collision_outdoors'
+            indoor: 'collision--indoor',
+            outdoor: 'collision--outdoor'
         }
     };
 }
@@ -191,9 +191,13 @@ Betteravia.Map.prototype = {
     },
 
     render: function() {
-        // this.generalCollision.children.forEach(function(obj) {
+        // this.outdoorCollision.children.forEach(function(obj) {
         //     Betteravia.map.game.game.debug.body(obj);
         // });
+
+        this.doorGroup.children.forEach(function(obj) {
+            Betteravia.map.game.game.debug.body(obj);
+        });
     },
 
     getPlayerSpawnPoint: function() {

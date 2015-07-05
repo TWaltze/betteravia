@@ -5,7 +5,7 @@ Betteravia.Map.SubMap = function(module, tileX, tileY) {
     this.tileY = tileY || 0;
 
     this.tileLayers = this.module.createLayers(
-        'floor', 'indoors0', 'indoors1', 'outdoors0', 'outdoors1'
+        'floor', 'indoor0', 'indoor1', 'outdoor0', 'outdoor1'
     );
 
     // We need to be able to position these.
@@ -38,12 +38,12 @@ Betteravia.Map.SubMap.prototype = {
 
     setIndoorAlpha: function(alpha) {
         this.tileLayers['floor'].alpha = alpha;
-        this.tileLayers['indoors0'].alpha = alpha;
-        this.tileLayers['indoors1'].alpha = alpha;
+        this.tileLayers['indoor0'].alpha = alpha;
+        this.tileLayers['indoor1'].alpha = alpha;
     },
 
     setOutdoorAlpha: function(alpha) {
-        this.tileLayers['outdoors0'].alpha = alpha;
-        this.tileLayers['outdoors1'].alpha = alpha;
+        this.tileLayers['outdoor0'].alpha = alpha;
+        this.tileLayers['outdoor1'].alpha = alpha;
     }
 };
