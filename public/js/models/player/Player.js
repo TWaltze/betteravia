@@ -71,6 +71,7 @@ Betteravia.Player.prototype = {
 
         this.id = index.toString();
         this.health = 3;
+        this.speed = 150;
         this.alive = true;
 
         this.nextPosition = null;

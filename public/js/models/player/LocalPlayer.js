@@ -67,7 +67,6 @@ Betteravia.LocalPlayer.prototype.update = function() {
     // }
 
     // Move the player
-    var speed = 200;
     var animation = null;
     var velocity = {
         x: 0,
@@ -94,15 +93,15 @@ Betteravia.LocalPlayer.prototype.update = function() {
     }
 
     if (Betteravia.cursors.up.isDown) {
-        velocity.y = -speed;
+        velocity.y = -this.speed;
     } else if (Betteravia.cursors.down.isDown) {
-        velocity.y = speed;
+        velocity.y = this.speed;
     }
 
     if (Betteravia.cursors.left.isDown) {
-        velocity.x = -speed;
+        velocity.x = -this.speed;
     } else if (Betteravia.cursors.right.isDown) {
-        velocity.x = speed;
+        velocity.x = this.speed;
     }
 
     // var pointerAngle = game.physics.arcade.angleToPointer(this.sprite);
