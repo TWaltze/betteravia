@@ -245,7 +245,7 @@
     <property name="sub_map" value="house1_f0"/>
    </properties>
   </object>
-  <object id="319" name="home0_door" type="door" gid="5383" x="960" y="672" width="32" height="16">
+  <object id="319" name="home0_door" type="door" gid="5383" x="960" y="688" width="32" height="16">
    <properties>
     <property name="id" value="0"/>
     <property name="parent" value="home0"/>

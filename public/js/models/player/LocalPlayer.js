@@ -148,5 +148,5 @@ Betteravia.LocalPlayer.prototype.update = function() {
 }
 
 Betteravia.LocalPlayer.prototype.render = function() {
-    this.game.debug.body(this.sprite);
+    // this.game.debug.body(this.sprite);
 }

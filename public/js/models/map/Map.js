@@ -191,13 +191,13 @@ Betteravia.Map.prototype = {
     },
 
     render: function() {
-        // this.outdoorCollision.children.forEach(function(obj) {
+        // this.indoorCollision.children.forEach(function(obj) {
         //     Betteravia.map.game.game.debug.body(obj);
         // });
 
-        this.doorGroup.children.forEach(function(obj) {
-            Betteravia.map.game.game.debug.body(obj);
-        });
+        // this.doorGroup.children.forEach(function(obj) {
+        //     Betteravia.map.game.game.debug.body(obj);
+        // });
     },
 
     getPlayerSpawnPoint: function() {
