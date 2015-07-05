@@ -46,6 +46,8 @@ Betteravia.Map.SubMap.prototype = {
         this.tileLayers['floor'].alpha = alpha;
         this.tileLayers['indoor0'].alpha = alpha;
         this.tileLayers['indoor1'].alpha = alpha;
+        this.tileLayers['indoor__obstacles0'].alpha = alpha;
+        this.tileLayers['indoor__obstacles1'].alpha = alpha;
     },
 
     setOutdoorAlpha: function(alpha) {
